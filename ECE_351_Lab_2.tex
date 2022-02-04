@@ -1,10 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                              %
 % Jayson Haddon                                                %
-% ECE 351 Section 51                                           %
-% Lab 2                                                        %
+% ECE 341                                         %
+% Lab 1                                                        %
 % 02/01/2022    
-%Github https://github.com/haddjays?tab=repositories
+%
 % Necessary Details:                            %
 %                                                              %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -50,7 +50,7 @@
 
 \setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
 
-\title{Lab 2}								
+\title{Lab 1}								
 % Title
 \author{Jayson Haddon}						
 % Author
@@ -76,8 +76,8 @@
 \begin{titlepage}
 	\centering
     \vspace*{0.5 cm}
-\begin{center}    \textsc{\Large   ECE 351 }\\[2.0 cm]	\end{center}% University Name
-	\textsc{\Large User-Defined Functions  }\\[0.5 cm]				% Course Code
+\begin{center}    \textsc{\Large   ECE 341 }\\[2.0 cm]	\end{center}% University Name
+	\textsc{\Large Digital Input and Output  }\\[0.5 cm]				% Course Code
 	\rule{\linewidth}{0.2 mm} \\[0.4 cm]
 	{ \huge \bfseries \thetitle}\\
 	\rule{\linewidth}{0.2 mm} \\[1.5 cm]
@@ -108,308 +108,139 @@
 \end{titlepage}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\tableofcontents
-\pagebreak
 
 \renewcommand{\thesection}{\arabic{section}}
 \section{Introduction}
-The objective of this lab was to create user-defined functions in python and use them to demonstrate various signal operations. These signal operations are time shifting, time scaling, signal addition, and discrete differentiation. Some useful background information is that python relies heavily on python lists and numpy arrays. You can use for and if/else loops. The len() function is often used in for loops to return the number of elements. All plots need to have x and y axis labeled. 
-\section{Equations}
-The two important equations for this lab is the ramp and step function.
-\newline
-\newline
- r(t) =
-\[ \begin{cases} 
-      x & x\geq 0 \\
-      0 & < 0 
-   \end{cases}
-\]
-\newline
-u(t)=
-\[ \begin{cases} 
-      1 & t\geq 0 \\
-      0 & t <  0 
-   \end{cases}
-\]
-\section{Methodology}
-The first task in part 4 asks to create a function func1 that implements the function y = cos(t). To complete this I modified the example code by removing the if else loop and then by just setting y(t) = np.cos(t[i]). The code for this task can be seen in the result section under part 4. The graph of the cos function can be seen below in figure 2. The next part of the lab asks to plot the graph shown below in figure 1.
+The objective of this lab was to get introduced to reading and writing to the input and outputs of the PIC32 micro controller. For this lab the reading of inputs is done by recording if a button is being pushed. This is done by using the code PORTReadBits. This allows you to read a bit position from one of the ports. Once you have read from port you can record your value to an integer. For this lab the writing of the output is done by turning an led on depending on what button has been pushed. Writing ot the led can be done by PORTSetBits. This allows you send a hexadecimal value to a port and turn on the leds. 
+\section{Implementation}
+The software implementation went as planned. The first part of the lab was to initialize the system and define the two needed integers. The initialize code was provided. 
 
-[
-\begin{figure}[h!]
-    \begin{center}
-  \caption{Task for Part 5}
-  \includegraphics[scale=0.5]{Lab 2 sample graph.PNG}
-\end{center}
-\end{figure} ]
-\newpage
+\subsection{Listing 1}
+\begin{lstlisting}[language=C]
+PORTSetPinsDigitalIn(IOPORT_A, BTN3);	
+PORTSetPinsDigitalIn(IOPORT_G, BTN1 | BTN2); 
+PORTSetPinsDigitalOut(IOPORT_G, BRD_LEDS); 	
 
-The first part of part 5 ask to derive an equation for the graph shown in figure 1. To make the equation I used the ramp and step function that was taught in class to create the shape shown above. The equation can be seen in equation 1 in the result section. The next part of task 5 ask to create user function to plot the sample graph in python. To do this I created two different functions. One was the ramp function and the other was the step function. In the ramp function I used the definition of the ramp function to define that when t > 0 y = t and when t < 0 y = 0. This would allow for time shifting and create the slope of one that is the ramp function. For the step function I also used the definition of the step function to define that when t > 0 y = 1 and when t < 0 y = 0. After creating the step and ramp function, I used the equation I derived for the plot and graphed the plot using y given functions. The code and plot for this can be seen in part 5 of the result section. 
+unsigned int readbutton = 0;
+unsigned int decodebutton= 0;
+\end{lstlisting}
+This section of code is in the main before the while (1) loop. The point of the first thing lines is to initialize the board. The PORTSetPinsDigitalIN defines the BTN 1 and BTN 2 to be inputs while the PORTSetPinsDigitalOut defines the LEDs to be outputs.In CerebotMX7cK.h BTN 1, BTN 2, and the LEDS are assigned to the proper port positions that they are on the board. The last two lines of this code is used to define two unsigned integers which will be used to record the instructions from the buttons. 
 
-The last part of the lab was time shifting. The first task for part 6 was to apply a time reversal and plot the result. To do this I inverted the t in all of my functions. This equation and plot can be seen below in the result section under part 6 task 1. The next task was to apply a time shift of f(t-4) and f(-t-4). To do this I applied the time shift inside of my call to the functions. The equations and plots can be seen under results section part 6 task 2. The third task was to time shift the functions by f(t/2) and f(t*2). To do this I applied the time shift inside of my call to the functions. The equations and plots can be seen below in results under part 6 task 3. The next task was to graph the derivative of the function is part 4 task 2 by hand. This can be seen in results under part 6 task 4. The last task was to take the derivative of the function. To do this the np.diff function was used. To get the arrayies to be the same size and to take the derivative I first took the derivative of time and then took the derivative of my function over the derivative of time. I then plotted the function. The code and plot can be seen below in the results under Part 6 task 5. 
+The second section of this lab is the while (1) inside of the main. This is the main body of the code used in the lab
+\subsection{Listing 2}
+\begin{lstlisting}[language=C]
+    readbutton = read_buttons();
+    decodebutton = decode_buttons(readbutton);
+    control_leds(decodebutton);
+\end{lstlisting}
+This section of code calls the three functions that were defined in the lab. The first line uses one of the integers that was defined in the initialize code to be set equal to the first function. This first function will read what buttons are pressed. The second function takes the integer from the first line and determine what button has been pushed and returns what leds need to be turned on. The second integer that was defined in the initialize part of the code then is set equal to the hexideicmal value of what led will be turned on. The third line of code takes the output from the second function and writes to the board to turn the leds on.  
 
+The third section of the lab is the first function that reads the button input. 
+\subsection{Listing 3}
+\begin{lstlisting}[language=C]
+int read_buttons(void)
+{
+    unsigned int tempbutton = 0;
+    tempbutton = PORTReadBits(IOPORT_G, BTN1 | BTN2);
+    return tempbutton;
+}
+\end{lstlisting}
+The first line of the function defines a local variable to be used inside of this function. The next line of code uses the PORTReadBits to read the bit postion 6 and 7 from port 6 which is button 1 and 2 and then set this equal to the local variable. The last line of code returns the local variable. 
 
-\section{Results}
-\subsection{Part 4}
-\begin{lstlisting}[language=Python]
-import numpy as np
-import matplotlib.pyplot as plt
+The fourth section of this lab is the second function that determine what leds should be turned on from what button is pressed. 
+\subsection{Listing 4}
+\begin{lstlisting}[language=C]
+ int decode_buttons(int buttons)
+{
+    unsigned int decoded;
+    if (buttons == 0) {
+        decoded = LED1; }
+    if (buttons == 64) {
+        decoded = LED2; }
+    if (buttons == 128) {
+        decoded = LED3; }
+    if(buttons == 192) {
+        decoded = LED4; }
+    return decoded;
+}
+\end{lstlisting}
+The first line of the function defines a local variable to be used inside of this function. The next lines of code are all the different cases that could result in a button being pressed. From the precious function since button 1 is bit position 6, if it is a one then it would return the value 2E6, which is 64. If button 2 is pressed which is in bit position 7, then it would return 2E7, which is 128. If neither of the buttons are pressed it would return a zero and if both are pressed then 64 + 128 is 192. The four different if statements check each of the four cases and then set the local variable to the correct hexadecimal value of the correct LED. Since in CerebotMX7cK.h the leds are defined as their bit postion, instead of writing out 0x00001000 for LED 1 to be turned on, the LED1 can just be called to make the code easier to read. The last line of code returns to local variable which what led should be turned on. This code could have been written better to include and case if none of these if statements return true or by using cases. 
 
-#plt.rcParams.update({'fontsize': 14}) # Set font size in plots
+The firth section of this lab is the third function that turns the leds on. 
 
-steps = 1e-2 # Define step size
-t = np.arange(0, 10 + steps , steps) # Add a step size to make sure the
-# plot includes 5.0. Since np.arange () only
-# goes up to , but doesnt include the
-# value of the second argument
-print('Number of elements: len(t) = ', len(t), '\nFirst Element: t[0] = ', t[0], 
-      ' \nLast Element: t[len(t) - 1] = ', t[len(t) - 1])
-# Notice the array might be a different size than expected since Python starts
- # at 0. Then we will use our knowledge of indexing to have Python print the
-# first and last index of the array. Notice the array goes from 0 to len() - 1
-
-# --- User - Defined Function ---
-# Create output y(t) using a for loop and if/else statements
-def func1(t): # The only variable sent to the function is t
-    y = np.zeros(t.shape)
-    
-    for i in range(len(t)):
-            y[i] = np.cos(t[i]) #create a cosine graph
-    return y
-
-y = func1(t) # call the function we just created
-
-plt.figure(figsize = (10, 7))
-plt.subplot(2, 1, 1)
-plt.plot(t, y)
-plt.grid()
-plt.ylabel('Amplitude')
-plt.xlabel( 't')
-plt.title('Part 4 Cosine Graph ')
-
-
-
+\subsection{Listing 5}
+\begin{lstlisting}[language=C]
+void control_leds(int leds)
+{
+    PORTClearBits(IOPORT_G, BRD_LEDS);
+    PORTSetBits(IOPORT_G, leds);
+}	
 \end{lstlisting}
 
-\begin{figure}[h!]
-    \begin{center}
-  \caption{Part 4 Cosine Graph}
-  \includegraphics[scale=0.5]{cosine graph.png}
-\end{center}
-\end{figure}
-\newpage
-\subsection{Part 5}
-\begin{equation}
-    y(t) = 1r(t) -r(t-3) + 5u(t-3)-2u(t-6) - 2r(t-6)
-\end{equation}
+The first line of this function use the peripheral PORTClearBIts to clear the leds of any value that they might have had. This makes sure all the leds are off before we write a new value to them. The next line of code takes the variable from the second function and use the peripheral PORTSetBits to set the correct led that was determined in function 2 on. 
 
-\begin{lstlisting}[language=Python]
-def ramp(t):
-    y = np.zeros(t.shape)
-    
-    for i in range(len(t)):
-        if (t[i] > 0):
-            y[i]=t[i]
-        else: 
-            y[i] = 0
-    
-    return y
-        
-def step(t):
-    x = np.zeros(t.shape)
-    
-    for i in range(len(t)):
-        if (t[i] > 0):
-            x[i]= 1
-        else:
-            y[i]=0
-    return x
-
-y = ramp(t) # Ramp function
-x = step(t) # Step function
-
-z = ramp(t) - ramp(t-3) +5*step(t-3)-2*step(t-6)-2*ramp(t-6)
-
-plt.figure(figsize = (10, 7))
-plt.subplot(2, 1, 1)
-plt.plot(t, z)
-plt.grid()
-plt.ylabel('Amplitude')
-plt.xlabel( 't')
-plt.title('Part 4 Cosine Graph ')
-\end{lstlisting}
-
-\begin{figure}[h!]
-    \begin{center}
-  \caption{Part 5}
-  \includegraphics[scale=0.5]{Part 2.png}
-\end{center}
-\end{figure}
-\newpage
-
-\subsection{Part 6}
-
-\subsubsection{Task 1}
-
-
-\begin{equation}
-    y(t) = 1r(-t) -r(-t-3) + 5u(-t-3)-2u(-t-6) - 2r(-t-6)
-\end{equation}
-
-\begin{figure}[h!]
-    \begin{center}
-  \caption{Part 6 Task 1}
-  \includegraphics[scale=0.5]{Part 6 task 1.png}
-\end{center}
-\end{figure}
-
-\subsubsection{Task 2}
-
-
-\begin{equation}
-    y(t) = 1r(t-4) -r(t-3-4) + 5u(t-3-4)-2u(t-6-4) - 2r(t-6-4)
-\end{equation}
-
-\begin{equation}
-    y(t) = 1r(-t-4) -r(-t-3-4) + 5u(-t-3-4)-2u(-t-6-4) - 2r(-t-6-4)
-\end{equation}
-
-\begin{figure}[h!]
-    \begin{center}
-  \caption{Part 6 Task 2 f(t-4)}
-  \includegraphics[scale=0.5]{Part 6 task 2 a.png}
-\end{center}
-\end{figure}
-\newpage
-\begin{figure}[h!]
-    \begin{center}
-  \caption{Part 6 Task 2 f(-t-4)}
-  \includegraphics[scale=0.5]{Part 6 task 2 b.png}
-\end{center}
-\end{figure}
-
-\subsubsection{Task 3}
-
-\begin{equation}
-    y(t) = 1r(t/2) -r((t-3)/2) + 5u((t-3)/2)-2u((t-6)/2) - 2r((t-6)/4)
-\end{equation}
-
-\begin{equation}
-    y(t) = 1r(t*2) -r((t-3)*2) + 5u((t-3)/2)-2u((t-6)*2) - 2r((t-6)*4)
-\end{equation}
-
-\begin{figure}[h!]
-    \begin{center}
-  \caption{Part 6 Task 3 f(t/2)}
-  \includegraphics[scale=0.5]{Part 6 task 3 a.png}
-\end{center}
-\end{figure}
-
-\begin{figure}[h!]
-    \begin{center}
-  \caption{Part 6 Task 3 f(t*2)}
-  \includegraphics[scale=0.5]{Part 6 task 3 b.png}
-\end{center}
-\end{figure}
-\newpage
-\subsubsection{Task 4}
-
-\begin{figure}[h!]
-    \begin{center}
-  \caption{Part 6 Task 4 HandDrawn}
-  \includegraphics[scale=0.5]{handdrawn.PNG}
-\end{center}
-\end{figure}
-
-\subsubsection{Task 5}
-
-\begin{lstlisting}[language=Python]
-
-def ramp(t):
-    y = np.zeros(t.shape)
-    
-    for i in range(len(t)):
-        if (t[i] > 0):
-            y[i]=t[i]
-        else: 
-            y[i] = 0
-    return y
-        
-def step(t):
-    x = np.zeros(t.shape)
-    
-    for i in range(len(t)):
-        if (t[i] > 0):
-            x[i]= 1
-        else:
-            x[i]=0
-            
-    return x
-
-def deriv(t):
-    u = np.zeros(t.shape)
-    
-    u = ramp(t) - ramp((t-3)) +5*step((t-3))-2*step((t-6))-2*ramp((t-6))
-    return u
-u = deriv(t)
-
-y = ramp(t) # Ramp function
-x = step(t) # Step function
-z = ramp(t) - ramp((t-3)) +5*step((t-3))-2*step((t-6))-2*ramp((t-6))
-
-dt = np.diff(t)
-dy = np.diff((deriv(t)))/dt
-
-plt.figure(figsize = (10, 7))
-plt.subplot(2, 1, 1)
-plt.ylim(-2,10)
-plt.plot(t, u)
-plt.plot(t[range(len(dy))],dy)
-plt.grid()
-plt.ylabel('Amplitude')
-plt.xlabel( 't')
-plt.title('Part 6 ')
-plt.show
-
-
-\end{lstlisting}
-
-\begin{figure}[h!]
-    \begin{center}
-  \caption{Part 5}
-  \includegraphics[scale=0.5]{derivative.png}
-\end{center}
-\end{figure}
-
-\section{Error Analysis}
-
-The difficulties I had during this experiment was first trying to understand how to graph the ramp and step function and then taking the derivative of the plot. Taking the derivative was especially difficult and I had to do quite a bit of searching before I got even get a start on taking the derivative. 
+\section{Testing and Verification}
+To test this code, after each function was created, I would use breaks to monitor the value that were being written to different variables. The last step was to let the program run and see if the correct led lite up on the board when a button was pressed. This was done by observing when no button was pressed, when button one was pressed, when button two was pressed, and when both buttons were pressed. 
 
 \section{Questions}
-1.) Are the plots from Part 3 Task 4 and Part 3 Task 5 identical? Is it possible for them to
-match? Explain why or why not. 
+One of the ways you can read and write to a specific bit without without affecting any other pins, the peripherals PORTSetBits and PORTReadBits. The PORTReadBits peripherals allows you to read the values from any of the ports on the PIC32 board and it allows you to specify what bit position you want to read from. This allows you to be able to read the data from the IO pins and then have code that determines what to do with that data. When you have decided what to do with the data, you can use the PORTSetBits peripherals. This peripherals allows you to write a hexadecimal value to to a specify port and bit position. This allows you to be able to write to the IO pins.
 
-No the plots from Task 4 and Task 5 are not identical. The plots are not identical because when you take the derivative of something that has an infinite slope, you have a hole at that instances. The np.diff function still models that slope as going to infinity. In a sense the graphs are the same but they are not because the hand drawn has a hole, while the computer simulation goes to infinite. 
+Shown below is the abstract repsentation of a PIC32 IO cell
+\begin{figure}[h!]
+    \begin{center}
+  \caption{PIC32 IO cell}
+  \includegraphics[scale=0.5]{IO Pin.PNG}
+\end{center}
+\end{figure}
+\newpage
 
-2.) How does the correlation between the two plots (from Part 3 Task 4 and Part 3 Task 5)
-change if you were to change the step size within the time variable in Task 5? Explain why
-this happens
+The voltage to the IO pin when the button is pressed can be described by 
+\begin{equation}
+    \frac{3.3-VIO}{R2}+\frac{3.3-VIO}{10E6}=\frac{VIO}{10E6}
+\end{equation}
+\begin{equation}
+    VIO = \frac{1.65*(10E3+10E6)}{10E3+0.5*10E6}
+\end{equation}
+While the current can be described by 
+\begin{equation}
+   IR2 = \frac{3.3-VIO}{10E3}
+\end{equation}
+With the button pressed in, the current across the IO pin is 0.329 micro amps and the voltage is 3.29671 V. 
+\newline
+Without the button being pressed
 
-If you were to change the steps size you might be able to get to the point where the simulation treads the infinite slopes as holes and then the two plots would be the same. This would be because as you took big time steps, you would be jumping over the infinite slope.
+The voltage to the IO pin can be described by 
+\begin{equation}
+  \frac{3.3-VIO}{10E6}=\frac{VIO-Vs}{R2}+\frac{VIO}{10E6}
+\end{equation}
+\begin{equation}
+    \frac{VIO-V2}{R2}=\frac{V2}{R1}
+\end{equation}
+Solving for VIO yields that VIO = 0.006574 V
 
-3.) Leave any feedback on the clarity of lab tasks, expectations, and deliverable.
+The Equation for the current when the button is open can be described by
+\begin{equation}
+    IR2 = \frac{VIO-V2}{10000}
+\end{equation}
+Solving for IR2 yields that IR2 = 0.3287 nano amps
 
-My only questions is if I am doing the lab report to the correct standards. 
+The external resistors are there to insure that a signal is able to be read if the button is pressed or not. Without the resistors there would not a high or low voltage value which could result in a floating value. If R1 was removed from the circuit then the circuit would have a higher input impedance and the software would not be able to actually read the input value. When you are trying to read a value on a circuit board, you want a low input impedance so little of your signal is lost. With a higher input impedance more of a small signal could be lost.
 
+From the equation 
+\begin{equation}
+    I = \frac{3.3-0.7}{470}
+\end{equation}
 
+If Vdd is now equal to 3.3 - 0.7 then the new current to the IO pin would be 5.53191 mA. The board is capable to put 18mA to the IO pin. The maximum current that give to any IO pin is 200mA. 
+
+Some of the software tools that was used in the lab was the debugger tools. The debugger tools are watch variable, breakpoints, step into, and step over. The watch variable tool was used in the initialize testing of my code to see if the correct values were being passed from one function to another. The breakpoints was used to stop the code at a certain point so I could look at a specific function. The step into and step over was used if I wanted to look into a function when debugging or if I wanted to just step over it. 
 \section{Conclusion}
-From this lab, I learned how to write functions in python. I also got a better understanding of what a step and ramp function is and how to use them. It was really useful to see how you actually plot the problems that we have been doing in class. It was interesting how the time shifts could be used and how to use the step and ramp functions to create certain shapes. I am still a little confused on what is happening for the derivative function. I feel the lab was successful for it widened my knowledge on what we are learning in class. I feel like I could have wrote my code in a better manner. 
+In conclusion, this lab was a success. I was able to create the proper functions for the code to read what buttons were pushed, process the information, and then turn on the correct led. Two of the limitations for my design could be that I did not include code if it did not receive a button input and I had no control over the timing of the circuit. Since the code was not that complected, it was able to quickly update if a button was pressed, but I had no idea what the time gap between each read was. 
 
-
-
-\section{Github}
-https://github.com/haddjays?tab=repositories
 \end{document}
 
-\section{Conclusion}
+
+
+
 
 %This template was created by Roza Aceska.
