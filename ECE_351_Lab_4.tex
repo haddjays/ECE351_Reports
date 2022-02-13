@@ -1,0 +1,392 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                              %
+% Jayson Haddon                                                %
+% ECE 351 Section 51                                           %
+% Lab 4                                                        %
+% 02/01/2022    
+%Github https://github.com/haddjays?tab=repositories
+% Necessary Details:                            %
+%                                                              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt,a4]{report}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{vmargin}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0,0,0.95}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+
+\setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+\title{Lab 4}								
+% Title
+\author{Jayson Haddon}						
+% Author
+\date{08/27/2020}
+% Date
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\theauthor}
+\lhead{\thetitle}
+\cfoot{\thepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+	\centering
+    \vspace*{0.5 cm}
+\begin{center}    \textsc{\Large   ECE 351 }\\[2.0 cm]	\end{center}% University Name
+	\textsc{\Large System Step Response Using Convolution  }\\[0.5 cm]				% Course Code
+	\rule{\linewidth}{0.2 mm} \\[0.4 cm]
+	{ \huge \bfseries \thetitle}\\
+	\rule{\linewidth}{0.2 mm} \\[1.5 cm]
+	
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushleft} \large
+		%	\emph{Submitted To:}\\
+		%	Name\\
+          % Affiliation\\
+           %contact info\\
+			\end{flushleft}
+			\end{minipage}~
+			\begin{minipage}{0.4\textwidth}
+            
+			\begin{flushright} \large
+			\emph{Submitted By :} \\
+			Jayson Haddon  
+		\end{flushright}
+           
+	\end{minipage}\\[2 cm]
+	
+%	\includegraphics[scale = 0.5]{PICMathLogo.png}
+    
+    
+    
+    
+	
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\pagebreak
+
+\renewcommand{\thesection}{\arabic{section}}
+\section{Introduction}
+The objective of this lab was to use convolutions to compute a systems step response. This will use the convolution integral to hand calculate the integral and then the  convolution function that was created in the last lab. 
+\section{Equations}
+The three signals used for the lab are listed below.
+\begin{equation}
+    h_1(t) = e^{-2t}*[u(t)-u(t-3)]
+\end{equation}
+\begin{equation}
+    h_2(t) = u(t-2) - u(t-6)
+\end{equation}
+\begin{equation}
+    h_3(t) = cos(wt)u(t)
+\end{equation}
+Convolution Integral
+\begin{equation}
+    y(t) =  \int_{0}^{t} x(\tau)h(t-\tau) \,d\tau 
+\end{equation}
+\section{Methodology}
+The first task in part 1 is to use the step and ramp functions developed in lab 2 to write the equations 1 through 3 as shown above. To complete this I used the step and ramp functions that I made in the previous lab. The code and plot of this can be seen below in result. 
+
+The first part of task 2 was to plot the step response of equations 1 through 3 using the convolution function that was created in lab three. To find the step response of a signal you take the convolution of that signal with the step function. To complete this I copied the convolution function I created in lab 3 and took the convolution of each function with the step function. The code and plot for this can be seen below in part 2 of the results. 
+
+The next part of task 3 was calculate the step response of each signal by solving the convolution integral. After you had solved the convolution integral then to plot of expression that you get from solving the integral. To complete this, I used the convolution Integral as shown in equation 4. My hand calculations, code, and plot can be seen in part 2 of the results. 
+
+
+\section{Results}
+\subsection{Part 1}
+\begin{lstlisting}[language=Python]
+#...........Time............#
+steps = 1e-2 # Define step size
+t = np.arange(-10, 10 + steps , steps)
+
+
+
+#...........Ramp and Step Function...........#
+def ramp(t):
+    y = np.zeros(t.shape)
+    
+    for i in range(len(t)):
+        if (t[i] > 0):
+            y[i]=t[i]
+        else: 
+            y[i] = 0
+    return y
+        
+def step(t):
+    x = np.zeros(t.shape)
+    
+    for i in range(len(t)):
+        if (t[i] > 0):
+            x[i]= 1
+        else:
+            x[i]=0
+            
+    return x
+
+#...............functions to graph.......#
+f = 0.25
+def h1(t):
+    z = np.exp(-2*t) * (step(t)-step(t-3))
+    return z
+def h2(t):
+    x = step(t-2) - step(t-6)
+    return x
+def h3(t):
+   y = np.cos(0.25*2*math.pi*t)*step(t)
+   return y
+def f(t):
+    z = step(t)
+    return z
+
+f = f(t)            
+h1 = h1(t)
+h2 = h2(t)
+h3 = h3(t)
+
+#.............Task 1 Plotting functions......#
+
+plt.figure(figsize = (10, 7))
+plt.subplot(3, 1, 1)
+plt.plot(t,h1)
+plt.grid()
+plt.ylabel('Amplitude')
+plt.xlabel( 't')
+plt.title('h1(t)')
+
+
+
+plt.subplot(3, 1, 2)
+plt.plot(t,h2)
+plt.grid()
+plt.ylabel('Amplitude')
+plt.xlabel( 't')
+plt.title('h2(t)')
+
+
+
+plt.subplot(3, 1, 3)
+plt.plot(t,h3)
+plt.grid()
+plt.ylabel('Amplitude')
+plt.xlabel( 't')
+plt.title('h3(t)')
+plt.show()
+
+
+\end{lstlisting}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Three Signals for Part 1}
+  \includegraphics[scale=0.5]{Task 1 plot.png}
+\end{center}
+\end{figure}
+\newpage
+
+\subsection{Part 2}
+Step Response of each function.
+\begin{lstlisting}[language=Python]
+#.............Convolution............#
+
+def convo(f1, f2):
+    Nf1 = len(f1)
+    Nf2 = len(f2)
+    f1extend = np.append(f1, np.zeros((1,Nf2-1)))
+    f2extend = np.append(f2, np.zeros((1,Nf1-1)))
+    result = np.zeros(f1extend.shape)
+    for i in range (Nf2 + Nf1-2):
+        result[i]=0
+        for j in range (Nf1):
+                if(i-j+1 > 0):
+                    try:
+                        result[i]+= f1extend[j]*f2extend[i-j+1]
+                    except:
+                        print(i,j)
+    return result
+
+#................Adjusting Time............#
+
+t = np.arange(-10, 10 + steps , steps)
+
+NT = len(t)
+
+textend = np.arange(2*t[0], 2*t[NT-1]+ steps,steps)
+
+fh1 = convo(f,h1)*steps
+fh2 = convo(f,h2)*steps
+fh3 = convo(f,h3)*steps
+
+
+plt.figure(figsize = (10, 7))
+plt.subplot(3, 1, 1)
+plt.plot(textend,fh1)
+plt.grid()
+plt.ylabel('Amplitude')
+plt.xlabel( 't')
+plt.title('Step Reponse of h1')
+
+plt.subplot(3, 1, 2)
+plt.plot(textend,fh2)
+plt.grid()
+plt.ylabel('Amplitude')
+plt.xlabel( 't')
+plt.title('Step Reponse of h2')
+
+plt.subplot(3, 1, 3)
+plt.plot(textend,fh3)
+plt.grid()
+plt.ylabel('Amplitude')
+plt.xlabel( 't')
+plt.title('Step Reponse of h3')
+plt.show
+\end{lstlisting}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Step Response of all three signals using convolution functions. }
+  \includegraphics[scale=0.5]{Task 2.png}
+\end{center}
+\end{figure}
+
+\subsection{Hand calculation convolution integrals}
+\begin{equation}
+   h_1(t) =  \int_{0}^{t} e^{-2\tau}*[u(t)-u(t-3)]  \,d\tau  
+\end{equation}
+\begin{equation}
+    h_1(t) = \frac{1}{2}*[e^{-2t}-1]u(t)
+\end{equation}
+\begin{equation}
+    h_1(t) = \frac{1}{2}*(1-e^{-2t}*u(t))-\frac{1}{2}((1-e^{-2(t-3)})*u(t-3))
+\end{equation}
+\begin{equation}
+    h_2(t) =  \int_{0}^{t} (u(t-2) - u(t-6))u(t-\tau)  \,d\tau  
+\end{equation}
+\begin{equation}
+    h_2(t) = (t-2)*u(t-2) - (t-6)*u(t-6)
+\end{equation}
+\begin{equation}
+    h_3(t) = \int_{0}^{t} cos(wt)u(t)*u(t-\tau) \,d\tau 
+\end{equation}
+\begin{equation}
+    h_3(t) = \frac{1}{w}sin(w*t)*u(t)
+\end{equation}
+
+\begin{lstlisting}[language=Python]
+#.................Part 3..........#
+t = np.arange (-20, 20 + steps, steps)
+
+def h1c(t):
+    z = 1/2*(1 - np.exp(-2*t))*step(t) - 1/2*(1 - np.exp(-2*(t-3)))*step(t-3)
+    return z
+def h2c(t):
+    z = ((t-2)*step(t-2))-((t-6)*step(t-6))
+    return z
+def h3c(t):
+    w = 0.25*2*math.pi
+    z = 1/w*np.sin(w*t)*step(t)
+    return z
+
+h1c = h1c(t)
+h2c = h2c(t)
+h3c = h3c(t)
+
+
+plt.figure(figsize = (10, 7))
+plt.subplot(3, 1, 1)
+plt.plot(t,h1c)
+plt.grid()
+plt.ylabel('Amplitude')
+plt.xlabel( 't')
+plt.title('h1c(t)')
+
+plt.subplot(3, 1, 2)
+plt.plot(t,h2c)
+plt.grid()
+plt.ylabel('Amplitude')
+plt.xlabel( 't')
+plt.title('h2(t)')
+
+plt.subplot(3, 1, 3)
+plt.plot(t,h3c)
+plt.grid()
+plt.ylabel('Amplitude')
+plt.xlabel( 't')
+plt.title('h3(t)')
+plt.show()
+\end{lstlisting}
+\newpage
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Hand Calculation step response of all three signals}
+  \includegraphics[scale=0.5]{Task 3.png}
+\end{center}
+\end{figure}
+
+
+\section{Error Analysis}
+
+Some of the error in this lab is the plots between the convolution function and the hand calculation integral should be the same. They are not the same by the way that the convolution function was set up. From h(t) the hand calculation integral goes from 0 to t and in this scope the function never goes back down, while for the convolution function, the function drops back down to zero. This just shows the different between the hand integral with bounds from 0 to t to the convolution functions that adds up each point in the array. 
+
+\section{Questions}
+ 1.) Leave any feedback on the clarity of the lab tasks, expectations, and deliverables.
+ 
+ The instruction and expectations were clear and easy to understand for this lab. 
+
+
+\section{Conclusion}
+In conclusions, from this I was able to see a comparison between the convolution function that was created and the convolution integral. Both the plots from the convolution function and the convolution integral are suppose to be the same, but from the way that the convolution function was made, it created some slight differences between the two plots. It was very useful to see the plots that the convolution integral creates. 
+
+
+
+\section{Github}
+https://github.com/haddjays?tab=repositories
+\end{document}
+
+\section{Conclusion}
+
+%This template was created by Roza Aceska.
