@@ -1,0 +1,387 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                              %
+% Jayson Haddon                                                %
+% ECE 351 Section 51                                           %
+% Lab 9                                                        %
+% 03/08/2022    
+%Github https://github.com/haddjays?tab=repositories
+% Necessary Details:                            %
+%                                                              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt,a4]{report}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{vmargin}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0,0,0.95}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+
+\setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+\title{Lab 9}								
+% Title
+\author{Jayson Haddon}						
+% Author
+\date{08/27/2020}
+% Date
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\theauthor}
+\lhead{\thetitle}
+\cfoot{\thepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+	\centering
+    \vspace*{0.5 cm}
+\begin{center}    \textsc{\Large   ECE 351 }\\[2.0 cm]	\end{center}% University Name
+	\textsc{\Large Fast Fourier Transform  }\\[0.5 cm]				% Course Code
+	\rule{\linewidth}{0.2 mm} \\[0.4 cm]
+	{ \huge \bfseries \thetitle}\\
+	\rule{\linewidth}{0.2 mm} \\[1.5 cm]
+	
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushleft} \large
+		%	\emph{Submitted To:}\\
+		%	Name\\
+          % Affiliation\\
+           %contact info\\
+			\end{flushleft}
+			\end{minipage}~
+			\begin{minipage}{0.4\textwidth}
+            
+			\begin{flushright} \large
+			\emph{Submitted By :} \\
+			Jayson Haddon  
+		\end{flushright}
+           
+	\end{minipage}\\[2 cm]
+	
+%	\includegraphics[scale = 0.5]{PICMathLogo.png}
+    
+    
+    
+    
+	
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\pagebreak
+
+\renewcommand{\thesection}{\arabic{section}}
+\section{Introduction}
+The purpose of this lab was to use the fast Fourier transforms in python to find the Fourier transform of functions. 
+\section{Equations}
+The four equations that will be used to take the Fourier transform of are listed below
+\begin{equation}
+    x(t) = cost(2\pi*t)
+\end{equation}
+\begin{equation}
+    x(t) = 5sin(2\pi*t)
+\end{equation}
+\begin{equation}
+  x(t) = 2cost((2\pi *2t)-2) + sin^2((2\pi * 6t)+3)
+\end{equation}
+\begin{equation}
+        x(t) = \sum_{k=1}^{\infty} \frac{2}{k\pi}*(1-cos(k\pi))*sin(k*\frac{2\pi}{T}*t)
+\end{equation}
+
+\section{Methodology}
+The first part of the lab was to create my own fast Fourier transform function. To do this I used the code that was given but the only thing that I changed was to return freq, X mag, and X phi. This code can be seen below in the results. 
+
+The first task of the lab was to use the fast Fourier transform of equation one and plot the transform with the magnitude and phase of the transform. This was done by changing my time function to plot from zero to two and setting variables freq, x mag, and x phi equal to the fast Fourier transform function I had just created. To output to look like the sample plot the first plot I did was just with x in relation to time. The second plot was the magnitude of H(f) and to complete this I plotted the freq variable in relation to the X mag variable. The third plot was to the phase of the transform. This was done by plotting the freq variable in relation to the x phi variable. The fourth plot was to repeat the second plot but with the x range -2 to 2 so that way you can capture all the important information. The fifth plot was the same as the third plot but with the x range -2 to 2 so that way you can capture all the important information. This code and graph can be seen below in the results. 
+
+The second task of this lab was repeat task one for equation 2. This plot can be seen in the results.
+
+The third task of this lab was to repeat task one for equation 3. This plot can be seen in the results.
+
+The fourth task was to make a new fast Fourier transform function that would make the phase plots more readable by getting rid of all the phase values less than 0.1. This was done by using a for loop that was in the range of the length of the x mag variable. Then to use an if statement to compare if the magnitude was smaller then 0.1 then to set the x phi or phase variable to zero. The next part of this task was to then repeat task one, two, and three with this new function. The code and graph for this can be seen below. 
+
+The fifth task was to was to us the fast Fourier transform on the square wave that was plotted in lab 8 with N = 15. To do this I imported the code I created in lab 8, and put the output of the square wave in the fast Fourier transform. I had to readjust the time to be from 0 to 16 seconds. The code and plot for this can be seen below.
+
+\section{Results}
+\subsection{Code for Fast Fourier Transforms}
+
+\begin{lstlisting}[language=Python]
+def fastfour(x,fs):
+    N = len(x) 
+    X_fft = scipy.fftpack.fft(x) 
+    X_fft_shifted = scipy.fftpack.fftshift(X_fft) 
+
+    freq = np.arange(-N/2, N/2)*fs/N 
+    X_mag = np.abs(X_fft_shifted)/N 
+    X_phi = np.angle(X_fft_shifted) 
+
+    plt.stem(freq , X_mag) 
+    plt.stem(freq , X_phi) 
+    return freq, X_mag, X_phi
+\end{lstlisting}
+
+
+\subsection{Part 1 Task 1}
+
+\begin{lstlisting}[language=Python]
+#----------------Task 1---------------------#
+freq, X_mag, X_phi = fastfour(x,fs)
+
+plt.figure ( figsize = (10 , 7) )
+plt.subplot (3 , 1 , 1)
+plt.plot (t , x)
+plt.grid ()
+plt.ylabel ('k = 1')
+plt.xlabel ('t')
+plt.title('Task 1: cos(2*pi*t)')
+
+plt.subplot (3 , 2 , 3)
+plt.stem(freq, X_mag)
+plt.grid ()
+plt.ylabel ('|H(f)|')
+
+plt.subplot (3 , 2 , 5)
+plt.stem (freq, X_phi)
+plt.grid ()
+plt.ylabel ('/_X(f)')
+plt.xlabel ('f[Hz]')
+
+plt.subplot (3 , 2 , 4)
+plt.stem(freq, X_mag)
+plt.grid ()
+plt.xlim(-2, 2)
+
+plt.subplot (3 , 2 , 6)
+plt.stem (freq, X_phi)
+plt.grid ()
+plt.xlim(-2, 2)
+plt.xlabel ('f[Hz]')
+plt.show ()
+\end{lstlisting}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 1 Plot}
+  \includegraphics[scale=0.6]{Task 1.png}
+\end{center}
+\end{figure}
+\newpage
+
+\subsection{Part 1 Task 2}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 2 Plot}
+  \includegraphics[scale=0.6]{Task 2.png}
+\end{center}
+\end{figure}
+\newpage
+\subsection{Part 1 Task 3}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 3 Plot}
+  \includegraphics[scale=0.6]{Task 3.png}
+\end{center}
+\end{figure}
+
+\subsection{Part 1 Task 4}
+
+\begin{lstlisting}[language=Python]
+def cleanfastfour(x,fs):
+    N = len(x)
+    X_fft = scipy.fftpack.fft(x)
+    X_fft_shifted = scipy.fftpack.fftshift(X_fft) 
+
+    freq = np.arange(-N/2, N/2)*fs/N
+    X_mag = np.abs(X_fft_shifted)/N 
+    X_phi = np.angle(X_fft_shifted)
+
+    plt.stem(freq , X_mag)
+    plt.stem(freq , X_phi)
+    
+    for i in range(len(X_mag)):
+     if abs(X_mag[i]) < 1e-10:
+         X_phi[i] = 0
+    return freq, X_mag, X_phi
+\end{lstlisting}
+\newpage
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 4 equation 1 Plot}
+  \includegraphics[scale=0.6]{Task 4a.png}
+\end{center}
+\end{figure}
+
+\newpage
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 4 equation 2 Plot}
+  \includegraphics[scale=0.5]{Task 4b.png}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 4 equation 3 Plot}
+  \includegraphics[scale=0.5]{Task 4c.png}
+\end{center}
+\end{figure}
+
+\subsection{Part 1 Task 5}
+\begin{lstlisting}[language=Python]
+def ak(k):
+    x = 0
+    return x
+
+
+def bk(k):
+    x = (2/(k*math.pi))*(1-np.cos(k*math.pi))
+    return x
+
+def square(N):
+    T = 8
+    w0 = (2*math.pi)/T
+    aksum = 0
+    bksum = 0
+    for num in np.arange(1,N+1):
+        num = ak(num)*np.cos(num*w0*t)
+        aksum = aksum + num
+        #print('AKSum =', aksum)
+    for num in np.arange(1,N+1):
+        num = bk(num)*np.sin(num*w0*t)
+        bksum = bksum + num
+        #print('BKSum =', bksum)
+    x = 1/2*0 + aksum+bksum
+    return x
+
+steps = 1/fs
+t = np.arange(0, 16 , steps)
+x = square(15)
+
+freq, X_mag, X_phi = cleanfastfour(x,fs)
+\end{lstlisting}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 5 Plot}
+  \includegraphics[scale=0.6]{Task 5.png}
+\end{center}
+\end{figure}
+
+
+
+
+
+\section{Error Analysis}
+This lab took me a little while to figure out how to get the correct graphs and how to organize the graphs correctly like was presented in the lab report. I also had my definition of the time set up like it was for all the other labs, and adding that step for each lab messed up the plots.
+
+
+\section{Questions}
+1. What happens if fs is lower? If it is higher? fs in your report must span a few orders of
+magnitude.
+
+When the fs is lower, there is less precision in the plots. When the fs is higher, the precision does not seem to get better. It also looks like the fs does not effect the magnitude or phase for the clean fast Fourier. For the regular fast Fourier transform at higher fs it makes the phase plot full or more data so the image is more cluttered, while for a lower fs, there is less data. A few examples are shown below. 
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 1 fs = 100}
+  \includegraphics[scale=0.5]{Task 1.png}
+\end{center}
+\end{figure}
+\newpage
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 1 fs = 1000}
+  \includegraphics[scale=0.5]{fs = 1000.png}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 1 fs = 10}
+  \includegraphics[scale=0.5]{fs = 10.png}
+\end{center}
+\end{figure}
+
+
+
+2. What difference does eliminating the small phase magnitudes make?
+
+Eliminating the small phase magnitude gets rid of a lot of useless data and allows us to get a clear picture of what the phase looks like. 
+
+
+3. Verify your results from Tasks 1 and 2 using the Fourier transforms of cosine and sine.
+Explain why your results are correct. You will need the transforms in terms of Hz, not rad/s.
+For example, the Fourier transform of cosine (in Hz) is:
+
+Task 1:
+\begin{equation}
+F(w) = 1/2(\delta(f-1)+\delta(f+1))    
+\end{equation}
+
+Task 2:
+\begin{equation}
+F(w) = 5j/2(\delta(f-1)-\delta(f+1))    
+\end{equation}
+
+These two transform proves that my graphs are correct because if you look at figure 1 for task 1 you can see that there is a delta at -1 and 1 with a magnitude of 0.5. This is what is shown by equation 5. For task 2 by looking at figure 2 you can see that there is a delta at -1 and 1 with a magnitude of 2.5. This is what is shown by equation 6
+
+4. Leave any feedback on the clarity/usefulness of the purpose, deliverables, and expectations
+for this lab.
+
+The only feedback I have for this lab is to mention to not add the + steps in the np.arrange for the time.  
+
+\section{Conclusion}
+In conclusion, from this lab I was able to use the fast Fourier transform function to be able to plot the magnitude and phase of a function. I also learned a lot more about how to position plots on python. 
+
+
+\section{Github}
+https://github.com/haddjays?tab=repositories
+\end{document}
+
+\section{Conclusion}
+
+%This template was created by Roza Aceska.
