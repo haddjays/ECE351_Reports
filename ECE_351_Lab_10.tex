@@ -1,0 +1,342 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                              %
+% Jayson Haddon                                                %
+% ECE 351 Section 51                                           %
+% Lab 10                                                        %
+% 04/05/2022    
+%Github https://github.com/haddjays?tab=repositories
+% Necessary Details:                            %
+%                                                              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt,a4]{report}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{vmargin}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0,0,0.95}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+
+\setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+\title{Lab 10}								
+% Title
+\author{Jayson Haddon}						
+% Author
+\date{08/27/2020}
+% Date
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\theauthor}
+\lhead{\thetitle}
+\cfoot{\thepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+	\centering
+    \vspace*{0.5 cm}
+\begin{center}    \textsc{\Large   ECE 351 }\\[2.0 cm]	\end{center}% University Name
+	\textsc{\Large Frequency Response  }\\[0.5 cm]				% Course Code
+	\rule{\linewidth}{0.2 mm} \\[0.4 cm]
+	{ \huge \bfseries \thetitle}\\
+	\rule{\linewidth}{0.2 mm} \\[1.5 cm]
+	
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushleft} \large
+		%	\emph{Submitted To:}\\
+		%	Name\\
+          % Affiliation\\
+           %contact info\\
+			\end{flushleft}
+			\end{minipage}~
+			\begin{minipage}{0.4\textwidth}
+            
+			\begin{flushright} \large
+			\emph{Submitted By :} \\
+			Jayson Haddon  
+		\end{flushright}
+           
+	\end{minipage}\\[2 cm]
+	
+%	\includegraphics[scale = 0.5]{PICMathLogo.png}
+    
+    
+    
+    
+	
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\pagebreak
+
+\renewcommand{\thesection}{\arabic{section}}
+\section{Introduction}
+The purpose of this lab was to use the frequency response tools and bode plot tools in python. The frequency response and bode plot tools can then be used to develop the frequency response of an RLC circuit to present its bode plot model. 
+\section{Equations}
+These four equations will be used to find the frequency response and bode plot of the RLC circuit.
+\begin{equation}
+    H(s) = \frac{\frac{1}{RC}*s}{s^2+\frac{1}{RC}*s+\frac{1}{LC}}
+\end{equation}
+
+\begin{equation}
+    H(jw) = \frac{\frac{1}{RC}*jw}{-w^2+\frac{1}{RC}*jw+\frac{1}{LC}}
+\end{equation}
+
+\begin{equation}
+    |H(jw)| = \frac{\frac{1}{RC}*w}{\sqrt{(\frac{1}{LC}-w^2)^2+(\frac{1}{RC})^2}}
+\end{equation}\begin{equation}
+   \phase{H(jw)}  = 90 - tan^{-1}(\frac{\frac{1}{RC}*w}{(\frac{1}{LC}-w^2)})
+\end{equation}
+The fifth equations will be used to pass the input signal through the RLC circuit.
+\begin{equation}
+    x(t) = cos(2\pi*100t)+cos(2\pi*3024t)+sin(2\pi*50000t)
+\end{equation}
+
+\section{Methodology}
+The first task of the lab was to use equation 3 and 4 shown above to find the magnitude and the phase in for the RLC circuit from 10E3 to 10E6 $\omega$. This was done by defining two different variables that one was equal to equation 3 and the other was equal to equation 4. After creating an equation for the phase of the RLC circuit, a user defined function needed to be created to adjust the frequency. The function was set up to detect if the phase was greater than 90 degrees to then take the phase and subtract it by 180. This allowed us to get a better picture of the phase. The next part of this task was just to plot the magnitude and phase. For these two functions it was important to use the semilogx command to plot the two graphs. The code and plot of this can be seen below in the results.  
+
+The second task of the lab was to use the scipy.signal.bode to plot the magnitude and phase frequency response of the RLC circuit. To do this I defined two different arrays that represented the numerator and the denominator of equation one. I then set the three variables I defined before of w, maghs, and Hdeg equal to the sig.bode. I then plot the magnitude vs the frequency and phase vs the frequency. The code and plot can can be seen below in the results. 
+
+The third task of this lab was import the control library and use the con.trasferfunction to plot the magnitude and phase with respect to frequency. This was done by using the same numerator and denominator variables that was created in part 2 and putting them as inputs into the con.transferfunction function. The last part of this task was to use the con.bode to capture all the variables and plot them. The code and plot can can be seen below in the results. 
+
+The fourth task of the lab was to plot equation 5. This was done by defining the frequency of the highest $\omega$ which was 50000. After defining the frequency, you could define the steps for the plot to be one over the frequency. The code and plot of this can be seen below in the results.
+
+The fifth task was to pass the input signal through the RLC circuit, and to this it must first be converted into the z domain by using the scipy.signal.billinear. The next part was then to pass the input signal through the filter using the scipy.signal.lfiter(). The last part of this task was tp plot the output signal. The code and plot of this can be seen below in the results.
+
+\section{Results}
+\subsection{Part 1 Task 1}
+
+\begin{lstlisting}[language=Python]
+def adjustHdeg(Hdeg):
+    for i in range(len(Hdeg)):
+        if Hdeg[i] > 90:
+            Hdeg[i] = Hdeg[i] - 180
+    return Hdeg
+
+R = 1e3
+L = 27e-3
+C = 100e-9
+
+
+maghs = (20*np.log10((w/(R*C))/(np.sqrt(w**4 + (1/(R*C)**2 - 2/(L*C))*w**2 + (1/(L*C))**2))))
+
+Hdeg = (np.pi/2 - np.arctan((1/(R*C)*w)/(-w**2 + 1/(L*C)))) * 180/np.pi
+Hdeg = adjustHdeg(Hdeg)
+
+plt.figure(figsize = (10,7))
+plt.subplot(2,1,1)
+plt.semilogx(w, maghs)
+plt.grid()
+plt.ylabel('Magnitude in dB')
+plt.title('Task 1')
+
+plt.subplot(2,1,2)
+plt.semilogx(w, Hdeg)
+plt.yticks([-90, -45, 0, 45, 90])
+plt.ylim([-90,90])
+plt.grid()
+plt.ylabel('Phase in degrees')
+plt.xlabel('Frequency in rad/s')
+plt.show()
+
+\end{lstlisting}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Magnitude and Phase}
+  \includegraphics[scale=0.6]{mag and phase.png}
+\end{center}
+\end{figure}
+
+\subsection{Part 1 Task 2}
+
+\begin{lstlisting}[language=Python]
+num = [1/(R*C), 0]
+den = [1, 1/(R*C), 1/(L*C)]
+
+
+w, maghs , Hdeg = sig.bode((num, den), w)
+
+
+plt.figure(figsize = (10,7))
+plt.subplot(2,1,1)
+plt.semilogx(w, maghs)
+plt.grid()
+plt.xlim([1e3, 1e6])
+plt.title('Task 2')
+
+plt.subplot(2,1,2)
+plt.semilogx(w, Hdeg)
+plt.grid()
+plt.xlim([1e3, 1e6])
+plt.ylim([-90,90])
+plt.xlabel('Frequency in rad/s')
+plt.show()
+\end{lstlisting}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{sig.bode magnitude and phase}
+  \includegraphics[scale=0.6]{bode mag and phase.png}
+\end{center}
+\end{figure}
+\newpage
+
+
+\subsection{Part 1 Task 3}
+
+\begin{lstlisting}[language=Python]
+#...............Part 3..................#
+
+num = [1/(R*C), 0]
+den = [1, 1/(R*C), 1/(L*C)]
+sys = con.TransferFunction ( num , den )
+plt.figure ( figsize = (10 , 7) )
+_ = con.bode ( sys , w , dB = True , Hz = True , deg = True , Plot = True )
+# use _ = ... to suppress the output
+\end{lstlisting}
+
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Magnitude and Phase in frequency}
+  \includegraphics[scale=0.6]{Task 3.png}
+\end{center}
+\end{figure}
+
+
+\subsection{Part 1 Task 4}
+\begin{lstlisting}[language=Python]
+fs = 50000*2*np.pi
+steps = 1/fs
+t = np.arange(0, 0.01 + steps , steps)
+
+
+
+def function(t):
+    x = np.cos(2*np.pi*100*t)+np.cos(2*np.pi*3042*t)+np.sin(2*np.pi*50000*t)
+    return x
+function = function(t)
+
+plt.figure ( figsize = (10 , 7) )
+plt.subplot (1 , 1 , 1)
+plt.plot(t, function)
+plt.grid()
+plt.title('Task 4')
+plt.xlabel('t')
+plt.ylabel('Magnitude')
+plt.show()
+
+\end{lstlisting}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 4 Plot}
+  \includegraphics[scale=0.6]{Task 4.png}
+\end{center}
+\end{figure}
+
+\subsection{Part 1 Task 5}
+\begin{lstlisting}[language=Python]
+zfunction, pfunction = sig.bilinear(num, den, fs)
+
+
+yt = sig.lfilter(zfunction, pfunction, function)
+
+
+
+plt.figure(figsize = (10,7))
+plt.plot(t, yt)
+plt.grid()
+plt.title('Task 5')
+plt.xlabel('t')
+plt.ylabel('Magnitude')
+plt.show()
+\end{lstlisting}
+\newpage
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Output Signal Plot}
+  \includegraphics[scale=0.6]{Task 5.png}
+\end{center}
+\end{figure}
+
+
+
+\section{Error Analysis}
+This lab took me a little while to figure out the first task of the lab to plot the magnitude and phase using the hand calculations. It was a little difficult to figure out you need to shift the phase and create a new function for that. After figuring out the first task, the rest of the lab was not bad. 
+
+
+\section{Questions}
+1. Explain how the filter and filtered outputs in part 2 make sense given the Bode plots from part 1. Discuss how the filter modifies specific frequency bands in Hz. 
+
+The filter makes sense because for this example we are dealing with higher frequency signals where the magnitude was lower. The higher frequency parts of the input signals do not have as much of an effect on the output, thus we see more of the first cosine terms of our input signal since it is occurring at a lower frequency. . 
+
+
+2. Discuss the purpose and the working of the scipy.signal.billinear() and the scipy.signal.lfilter(). 
+
+The scipy.signal.billinear converts the function from the s domain to the z domain, by taking the numerator and denominator of the transfer function and then converting it to the z domain. The scipy.signal.lfilter is responsible for the computing the filtered output of the input signal by using the frequencies it was given to figure out the magnitude and the phase of the output function. 
+
+
+3. What happens if you use a different sampling frequency in scipy.signal.bilinear() than you used for the time-domain signal?
+
+If you used a different sampling frequency than the one used for the time domain signal then the results are no longer accurate and don't make sense. 
+
+4. Leave any feedback on the clarity/usefulness of the purpose, deliverables, and expectations
+for this lab.
+
+I have not feed back for this lab.
+
+\section{Conclusion}
+In conclusion, this lab was useful for me to be able to see how to create my own bode plots and to be able to put an input signal through a filter and get an output signal. 
+
+
+\section{Github}
+https://github.com/haddjays?tab=repositories
+\end{document}
+
+\section{Conclusion}
+
+%This template was created by Roza Aceska.
