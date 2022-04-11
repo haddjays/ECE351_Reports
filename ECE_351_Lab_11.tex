@@ -1,0 +1,250 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                              %
+% Jayson Haddon                                                %
+% ECE 351 Section 51                                           %
+% Lab 11                                                        %
+% 04/12/2022    
+%Github https://github.com/haddjays?tab=repositories
+% Necessary Details:                            %
+%                                                              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt,a4]{report}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{vmargin}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0,0,0.95}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+
+\setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+\title{Lab 11}								
+% Title
+\author{Jayson Haddon}						
+% Author
+\date{08/27/2020}
+% Date
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\theauthor}
+\lhead{\thetitle}
+\cfoot{\thepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+	\centering
+    \vspace*{0.5 cm}
+\begin{center}    \textsc{\Large   ECE 351 }\\[2.0 cm]	\end{center}% University Name
+	\textsc{\Large Z-Transform Operations  }\\[0.5 cm]				% Course Code
+	\rule{\linewidth}{0.2 mm} \\[0.4 cm]
+	{ \huge \bfseries \thetitle}\\
+	\rule{\linewidth}{0.2 mm} \\[1.5 cm]
+	
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushleft} \large
+		%	\emph{Submitted To:}\\
+		%	Name\\
+          % Affiliation\\
+           %contact info\\
+			\end{flushleft}
+			\end{minipage}~
+			\begin{minipage}{0.4\textwidth}
+            
+			\begin{flushright} \large
+			\emph{Submitted By :} \\
+			Jayson Haddon  
+		\end{flushright}
+           
+	\end{minipage}\\[2 cm]
+	
+%	\includegraphics[scale = 0.5]{PICMathLogo.png}
+    
+    
+    
+    
+	
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\pagebreak
+
+\renewcommand{\thesection}{\arabic{section}}
+\section{Introduction}
+The purpose was to analyze discrete systems using Python built inf functions.  
+\section{Equations}
+This equations is what we will be considering to find the transfer function. 
+\begin{equation}
+    y[k] = 2x[k]- 40x[k-1]+10y[k-1]-16y[k-2]
+\end{equation}
+
+\section{Methodology}
+The first task of this lab was to find the transfer function of equation 1. This was done by taking equations 1 and using z transforms to convert the equations into the z domain. From there, the equation could be rearranged into the transfer function. The derivation of this can be seen below in the results. 
+
+The second task of this lab was to find the h|k| by using partial fraction expansion of the transfer function that was defined in task 1. After using partial fraction expansion, z transforms could be used to convert it back to k. The derivation of this can be seen below in the results. 
+
+The third part of this lab was to use scipy.signal.residuez to verify the partial fraction expansion that was done in task 2. To complete this task I created to variables. The first variable was set equal to the numerator of the transfer function that was found in task 1. The second variable was set equal to the denominator of the transfer function found in task 1. I then put both of these variables into the residuez function and displayed the output. The code and output code can be seen below in the results. 
+
+The fourth task of this lab was to use the provided zplane function to obtain a pole-zero plot for H(z). To complete this task, I copied the code that was provided called the function with the numerator and denominator function that I created for the third task. I then had it print the value of the zero and poles to check the values. The code and plot of this can be seen below. 
+
+The fifth task was to use the scipy.signal.freqz to plot the magnitude and phase response of H(z). To complete this task, I set two variables w and h equal to sig.freqz function with the numerator and denominator variables that was created in task 3. I then redefined w as w over pi. This would put the angle into radians. I also create a new variable called mag which I set equal to 20 log base 10 of the h variable. This would put the magnitude in db. I then plotted both the magnitude and the phase. The code and plots can be seen below in the results. 
+
+\section{Results}
+\subsection{Part 1 Task 1}
+\begin{equation}
+    y[k]-10y[k-1]+16y[k-2]=2x[k]-40x[k]
+\end{equation}
+\begin{equation}
+y(z)-10z^{-1}y(z)+16z^{-2}y(z)=2x(z)-40z^{-1}x(z)    
+\end{equation}
+\begin{equation}
+    H(z)=\frac{y(z)}{x(z)}=\frac{2-40z^{-1}}{1-10z^{-1}+16z^{-2}}
+\end{equation}
+\subsection{Part 1 Task 2}
+\begin{equation}
+    \frac{H(z)}{z}=\frac{2(z-20)}{(z-8)(z-2)}
+\end{equation}
+\begin{equation}
+    \frac{H(z)}{z}=\frac{-4}{z-8}+\frac{6}{z-2}
+\end{equation}
+\begin{equation}
+    h(k)=-4(8^k)u(k)+6(2^k)u(k)
+\end{equation}
+
+\subsection{Part 1 Task 3}
+
+\begin{lstlisting}[language=Python]
+#-------------------Task 3---------------------#
+num = [2,-40]
+den = [1,-10,16]
+
+R, P, _ = sig.residuez(num, den)
+
+print('R =', R)
+print('P =', P)
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python]
+R = [ 6. -4.]
+P = [2. 8.]
+\end{lstlisting}
+
+This would equate to equation 8 which proves my equations from task 2. 
+\begin{equation}
+    h(k)=-4(8^k)u(k)+6(2^k)u(k)
+\end{equation}
+\subsection{Part 1 Task 4}
+\begin{lstlisting}[language=Python]
+
+#-------------------Task 4----------------#
+Zero, Poles, k = zplane(num, den,filename=None)
+print('z= ', Zero, 'p= ', Poles, 'k= ', k)
+
+\end{lstlisting}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Task 4 Plot}
+  \includegraphics[scale=0.6]{Task 4.png}
+\end{center}
+\end{figure}
+
+\subsection{Part 1 Task 5}
+\begin{lstlisting}[language=Python]
+#-------------------Task 5-------------------#
+
+w, h = sig.freqz(num, den, whole = True)
+
+w = w/np.pi
+mag = 20*np.log10(abs(h))
+
+plt.figure ( figsize = (10 , 7) )
+plt.subplot (2 , 1 , 1)
+plt.plot(w, mag)
+plt.grid ()
+plt.ylabel ('Amplitude [dB]')
+plt.title('Task 5')
+
+plt.subplot (2 , 1 , 2)
+plt.plot(w, np.angle(h))
+plt.grid ()
+plt.ylabel ('Angle (radians)')
+plt.xlabel ('Frequency [rad/sample]')
+
+\end{lstlisting}
+\newpage
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Magnitude and Phase Plot}
+  \includegraphics[scale=0.6]{Task 5.png}
+\end{center}
+\end{figure}
+
+
+
+\section{Error Analysis}
+The hardest part of this lab for me was to do the first two task, since we had not learned about this in class yet. I also took me a little while to figure out the function we were given and how to use the function to graph the magnitude and phase. 
+
+
+\section{Questions}
+1. Looking at the plot generated in Task 4, is H(z) stable? Explain why or why not.
+
+The system is stable because all the poles lie within the left half of the z plane.
+
+2. Leave any feedback on the clarity/usefulness of the purpose, deliverables, and expectations
+for this lab.
+
+I have not feed back for this lab.
+
+\section{Conclusion}
+In conclusion, this lab was useful for me to get a better understand of functions in the z domain. 
+
+\section{Github}
+https://github.com/haddjays?tab=repositories
+\end{document}
+
+\section{Conclusion}
+
+%This template was created by Roza Aceska.
