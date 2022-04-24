@@ -1,0 +1,578 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                              %
+% Jayson Haddon                                                %
+% ECE 351 Section 51                                           %
+% Lab 12                                                        %
+% 04/26/2022    
+%Github https://github.com/haddjays?tab=repositories
+% Necessary Details:                            %
+%                                                              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt,a4]{report}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{vmargin}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0,0,0.95}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+
+\setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+\title{Lab 12}								
+% Title
+\author{Jayson Haddon}						
+% Author
+\date{08/27/2020}
+% Date
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\theauthor}
+\lhead{\thetitle}
+\cfoot{\thepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+	\centering
+    \vspace*{0.5 cm}
+\begin{center}    \textsc{\Large   ECE 351 }\\[2.0 cm]	\end{center}% University Name
+	\textsc{\Large Filter Design  }\\[0.5 cm]				% Course Code
+	\rule{\linewidth}{0.2 mm} \\[0.4 cm]
+	{ \huge \bfseries \thetitle}\\
+	\rule{\linewidth}{0.2 mm} \\[1.5 cm]
+	
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushleft} \large
+		%	\emph{Submitted To:}\\
+		%	Name\\
+          % Affiliation\\
+           %contact info\\
+			\end{flushleft}
+			\end{minipage}~
+			\begin{minipage}{0.4\textwidth}
+            
+			\begin{flushright} \large
+			\emph{Submitted By :} \\
+			Jayson Haddon  
+		\end{flushright}
+           
+	\end{minipage}\\[2 cm]
+	
+%	\includegraphics[scale = 0.5]{PICMathLogo.png}
+    
+    
+    
+    
+	
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\pagebreak
+
+\renewcommand{\thesection}{\arabic{section}}
+\section{Introduction}
+The purpose of this lab was to apply the skills and concepts that we have been learning in lab and in the class to design a filter.
+\section{Equations}
+Transfer function of RLC circuit
+\begin{equation}
+    H(s) = \frac{C*R*s}{s^2*C*L+C*R*s+1}
+\end{equation}
+Corner Frequency Equation
+\begin{equation}
+    w_c=\frac{R}{2*L}+\sqrt{(\frac{R}{2*L})^2+\frac{1}{L*C}}
+\end{equation}
+
+\section{Methodology}
+This first task of this lab was to identify the magnitude and corresponding frequencies due to the low frequency vibrations, switching amplifier, and the position measurement information. To begin this lab I first copied over the code for the noisy signal function into python. I then copied the faster graphing function that was given. After I had these two tools I copied my fast Fourier function from lab 9. For the fast Fourier function I defined the fs to be 1e6. This should cover the entire range of the signal. I then called the fast Fourier function and set three variables freq, X mag, and X phi equal to the output. From there I begin plotting the magnitude of the signal at different frequencies using the fast Fourier function. I began by plotting the function from 0 to 100000 Hz to show the entire graph. I then plotted from 0 to 200 Hz and then from 0 to 1800 Hz to show the low frequency vibrations. I then plotted from 1800 to 2000 to show the position measurement information. The last thing I plotted was from 2000 to 10000 to show the switching amplifier information. All these plots helped me to get an outline of what the signal looked like. The code and all the plots can be seen below in the results section under task 1.
+
+The second task of this lab was to design an analog filter circuit to remove the noise and only pass the position measurement information. To do this I first began by choosing a filter. The first filter I tried can be seen below in task 2. This filter had two resistors and two capacitors. This circuit did not work because I could not get the cut off to meet the wanted specifications. I then tried to use an all series RLC circuit. This seem to work fine. Since it was given that the position measurement information was between 1800 and 2000 Hz. I used the equations 2 in the equations section with the two corner frequencies and a resistor value of 1000 ohms to calculate the capacitor and inductor value. After calculating these values, I found the transfer function and used the filter process that was used in lab 10. After defining the numerator and denominator of the transfer function and putting it through the sig.lfilter, I was able to graph the filter signal. This can be seen in the results. After designing the filter and filtering the signal, I used to bode plot function that was used in lab 10 to plot the bode plot of the new filtered function over different frequencies. As seen from figure 11, the low frequency vibrations were attenuated by -30 dB. In figure 12 it can be seen that the position measurement is attenuated by less than -0.3 dB. In figure 13 it can be seen that the switching amplifier is eventually attenuated by -21 dB. In figure 14 it can be seen that the high frequencies are attenuated by at least -30 dB. After creating the bode plot, used the fast Fourier function of the new filtered signal. I then copied all the plots that I made for the unfiltered signal for the new filtered signal which can be seen in the results. In figure 16 it can be seen that the low frequency inputs are attenuated. In figure 18 it can be seen that the position measurement are not attenuated. In figure 19 it can be seen that the switching amplifier is attenuated and in figure 20 it can be seen that the high frequency signals are gone. 
+
+\section{Results}
+\subsection{Task 1}
+
+\begin{lstlisting}[language=Python]
+# load input signal
+df = pd. read_csv ('NoisySignal.csv ')
+
+t = df['0']. values
+sensor_sig = df['1']. values
+
+plt. figure ( figsize = (10 , 7))
+plt. plot (t, sensor_sig )
+plt. grid ()
+plt. title ('Noisy Input Signal ')
+plt. xlabel ('Time [s]')
+plt. ylabel ('Amplitude [V]')
+plt. show ()
+
+
+##### fast graphing
+def make_stem(ax ,x,y, color='k', style='solid',label='',linewidths =2.5 ,** kwargs):
+    ax.axhline(x[0],x[-1],0, color='r')
+    ax.vlines(x, 0 ,y, color=color , linestyles=style , label=label , linewidths=linewidths)
+    ax.set_ylim ([1.05*y.min(), 1.05*y.max()])
+
+
+
+# Fast Fourier
+def cleanfastfour(x,fs):
+    N = len(x)
+    X_fft = scipy.fftpack.fft(x)
+    X_fft_shifted = scipy.fftpack.fftshift(X_fft) 
+
+    freq = np.arange(-N/2, N/2)*fs/N
+    X_mag = np.abs(X_fft_shifted)/N 
+    X_phi = np.angle(X_fft_shifted)
+
+    
+    for i in range(len(X_mag)):
+     if abs(X_mag[i]) < 1e-10:
+         X_phi[i] = 0
+    return freq, X_mag, X_phi
+
+
+
+# Finding the different magnitudes for different frequencies
+
+fs = 1e6 #Will cover the entire range of the signal
+
+freq, X_mag, X_phi = cleanfastfour(sensor_sig,fs)
+
+#Magnitude of Entire Range
+fig , ax = plt . subplots ( figsize =(10 , 7) )
+make_stem ( ax , freq , X_mag )
+plt.ylabel ('|X(f)|')
+plt.xlabel ('f[Hz]')
+plt.title('Unfiltered Range of  to 10000 Hz')
+plt.xlim(0,100000)
+plt.grid ()
+plt.show ()
+
+#Magnitude of range from 0 to 200 Hz
+
+fig , ax = plt . subplots ( figsize =(10 , 7) )
+make_stem ( ax , freq , X_mag )
+plt.ylabel ('|X(f)|')
+plt.xlabel ('f[Hz]')
+plt.title('Unfiltered Range of 0 to 200 Hz')
+plt.xlim(0,200)
+plt.grid ()
+plt.show ()
+
+
+#Magnitude of range up to 1800 Hz
+
+fig , ax = plt . subplots ( figsize =(10 , 7) )
+make_stem ( ax , freq , X_mag )
+plt.ylabel ('|X(f)|')
+plt.xlabel ('f[Hz]')
+plt.title('Unfiltered Range of 0 to 1800 Hz')
+plt.xlim(0,1800)
+plt.grid ()
+plt.show ()
+
+#Magnitude range of 1800 to 2000
+
+fig , ax = plt . subplots ( figsize =(10 , 7) )
+make_stem ( ax , freq , X_mag )
+plt.ylabel ('|X(f)|')
+plt.xlabel ('f[Hz]')
+plt.title('Unfiltered Range of 1800 to 2000 Hz')
+plt.xlim(1800,2000)
+plt.grid ()
+plt.show ()
+
+#Magnitude range of 2000 to 10000
+
+fig , ax = plt . subplots ( figsize =(10 , 7) )
+make_stem ( ax , freq , X_mag )
+plt.ylabel ('|X(f)|')
+plt.xlabel ('f[Hz]')
+plt.title('Unfiltered Range of 2000 to 10000 Hz')
+plt.xlim(2000,10000)
+plt.grid ()
+plt.show ()
+\end{lstlisting}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Noisy signal}
+  \includegraphics[scale=0.5]{Noisy signal.png}
+\end{center}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Unfiltered 0 to 10000 Hz}
+  \includegraphics[scale=0.5]{unfi full range.png}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Unfiltered 0 to 200 Hz}
+  \includegraphics[scale=0.5]{unfi 0 to 200.png}
+\end{center}
+\end{figure}
+\newpage
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Unfiltered 0 to 1800 Hz}
+  \includegraphics[scale=0.5]{unfi 0 to 1800.png}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Unfiltered 1800 to 2000 Hz}
+  \includegraphics[scale=0.5]{unfi 1800 to 2000.png}
+\end{center}
+\end{figure}
+\newpage
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Unfiltered 2000 to 10000 Hz}
+  \includegraphics[scale=0.5]{unfi 2000 to 10000.png}
+\end{center}
+\end{figure}
+
+\subsection{Part 2}
+\begin{lstlisting}[language=Python]
+#-------------Part 2-------------#
+#c1 = 4.42097e-9
+#c2 = 3.97887e-9
+#r1 = 20000
+#r2 = 20000
+
+#Use bandpass filter from lab 10
+#calculate L with center freqency of 1900, R = 10000, and C = 100e-9
+#1900 = 1/(2*pi*sqrt(L*100e-9))
+
+
+R = 3700
+C = 8.84194e-9
+L = 0.795775
+#C = 9.5e-9
+#L = 1
+#C = 9e-9
+num = [C*R,0]
+den = [C*L,C*R,1]
+steps = 1
+f = np.arange(1, 1e6 + steps, steps)
+w = f*2*np.pi
+
+zfunction, pfunction = sig.bilinear(num, den, fs)
+yt = sig.lfilter(zfunction, pfunction, sensor_sig)
+
+
+
+
+plt.figure(figsize = (10,7))
+plt.plot(t, yt)
+plt.grid()
+plt.title('Filtered NoisySignal')
+plt.xlabel('t')
+plt.ylabel('Magnitude')
+plt.show()
+
+#Bode Plot of entire range
+sys = con.TransferFunction ( num , den )
+plt.figure ( figsize = (10 , 7) )
+_ = con.bode ( sys , w , dB = True , Hz = True , deg = True , Plot = True )
+
+steps = 1
+f = np.arange(1, 2000 + steps, steps)
+w = f*2*np.pi
+
+sys = con.TransferFunction ( num , den )
+plt.figure ( figsize = (10 , 7) )
+_ = con.bode ( sys , w , dB = True , Hz = True , deg = True , Plot = True )
+
+steps = 1
+f = np.arange(1800, 2000 + steps, steps)
+w = f*2*np.pi
+
+sys = con.TransferFunction ( num , den )
+plt.figure ( figsize = (10 , 7) )
+_ = con.bode ( sys , w , dB = True , Hz = True , deg = True , Plot = True )
+
+steps = 1
+f = np.arange(2000, 10000 + steps, steps)
+w = f*2*np.pi
+
+sys = con.TransferFunction ( num , den )
+plt.figure ( figsize = (10 , 7) )
+_ = con.bode ( sys , w , dB = True , Hz = True , deg = True , Plot = True )
+
+steps = 1
+f = np.arange(10000, 100000 + steps, steps)
+w = f*2*np.pi
+
+sys = con.TransferFunction ( num , den )
+plt.figure ( figsize = (10 , 7) )
+_ = con.bode ( sys , w , dB = True , Hz = True , deg = True , Plot = True )
+
+freq, X_mag, X_phi = cleanfastfour(yt,fs)
+
+#Magnitude of Entire Range
+fig , ax = plt . subplots ( figsize =(10 , 7) )
+make_stem ( ax , freq , X_mag )
+plt.ylabel ('|X(f)|')
+plt.xlabel ('f[Hz]')
+plt.title('Filtered Entire Range')
+plt.xlim(0,100000)
+plt.grid ()
+plt.show ()
+
+#Magnitude of range from 0 to 200 Hz
+
+fig , ax = plt . subplots ( figsize =(10 , 7) )
+make_stem ( ax , freq , X_mag )
+plt.ylabel ('|X(f)|')
+plt.xlabel ('f[Hz]')
+plt.title('Filtered Range of 0 to 200 Hz')
+plt.xlim(0,200)
+plt.grid ()
+plt.show ()
+
+
+#Magnitude of range up to 1800 Hz
+
+fig , ax = plt . subplots ( figsize =(10 , 7) )
+make_stem ( ax , freq , X_mag )
+plt.ylabel ('|X(f)|')
+plt.xlabel ('f[Hz]')
+plt.title('Filtered Range of 0 to 1800 Hz')
+plt.xlim(0,1800)
+plt.grid ()
+plt.show ()
+
+#Magnitude range of 1800 to 2000
+
+fig , ax = plt . subplots ( figsize =(10 , 7) )
+make_stem ( ax , freq , X_mag )
+plt.ylabel ('|X(f)|')
+plt.xlabel ('f[Hz]')
+plt.title('Filtered Range of 1800 to 2000 Hz')
+plt.xlim(1800,2000)
+plt.grid ()
+plt.show ()
+
+#Magnitude range of 2000 to 10000
+
+fig , ax = plt . subplots ( figsize =(10 , 7) )
+make_stem ( ax , freq , X_mag )
+plt.ylabel ('|X(f)|')
+plt.xlabel ('f[Hz]')
+plt.title('Filtered Range of 2000 to 10000 Hz')
+plt.xlim(2000,10000)
+plt.grid ()
+plt.show ()
+
+#Magnitude range of 10000 to 100000
+
+fig , ax = plt . subplots ( figsize =(10 , 7) )
+make_stem ( ax , freq , X_mag )
+plt.ylabel ('|X(f)|')
+plt.xlabel ('f[Hz]')
+plt.title('Filtered Range of 10000 to 100000 Hz')
+plt.xlim(10000,100000)
+plt.grid ()
+plt.show ()
+\end{lstlisting}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{First Filter}
+  \includegraphics[scale=0.8]{first circuit.PNG}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Second Filter}
+  \includegraphics[scale=0.8]{second circuit.PNG}
+\end{center}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Filtered Signal}
+  \includegraphics[scale=0.5]{filtered signal.png}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Bode Plot 0 to 10000 Hz}
+  \includegraphics[scale=0.5]{full bode plot.png}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Bode Plot 0 to 1800 Hz}
+  \includegraphics[scale=0.5]{0 to 1800 bode.png}
+\end{center}
+\end{figure}
+\newpage
+
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Bode Plot 1800 to 2000 Hz}
+  \includegraphics[scale=0.5]{1800 to 2000 bode.png}
+\end{center}
+\end{figure}
+\newpage
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Bode Plot 2000 to 10000 Hz}
+  \includegraphics[scale=0.5]{2000 to 10000 bode.png}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Bode Plot 10000 to 100000 Hz}
+  \includegraphics[scale=0.5]{10000 to 100000 bode.png}
+\end{center}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Filtered 0 to 10000 Hz}
+  \includegraphics[scale=0.5]{full filtered.png}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Filtered 0 to 200 Hz}
+  \includegraphics[scale=0.5]{filt 0 to 200.png}
+\end{center}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Filtered 0 to 1800 Hz}
+  \includegraphics[scale=0.5]{filt 0 to 1800.png}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Filtered 1800 to 2000 Hz}
+  \includegraphics[scale=0.5]{filt 1800 to 2000.png}
+\end{center}
+\end{figure}
+\newpage
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Filtered 2000 to 10000 Hz}
+  \includegraphics[scale=0.5]{filt 2000 to 10000.png}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Filtered 10000 to 100000 Hz}
+  \includegraphics[scale=0.5]{filt 10000 to 100000.png}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Labeled Bode Plot}
+  \includegraphics[scale=0.7]{labeled bode plot.PNG}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+  \caption{Labeled Filtered Signal}
+  \includegraphics[scale=0.7]{check filterted signal.PNG}
+\end{center}
+\end{figure}
+
+\newpage
+
+\section{Error Analysis}
+Some of the error in this lab is my filter. Most of the filter equations are designed to get you the -3dB values. Since this lab asked for -0.3 dB values, I had to modify the value of the components to try to achieve the -0.3 dB of the position measurement information. This resulted in the filter not attenuating the switching amplifier noise enough. This results in some error for my filter, but I feel like the filter still does the job that it is suppose to. With actual tests from the product, I could determine if to much error was being created from this error in my design and if I would need to rebuild the filter. The hardest and most difficult part of this lab for me was understanding the instructions. The instructions were not very clear on what was wanted until you asked the TA. 
+
+
+\section{Questions}
+1. Earlier this semester, you were asked what you personally wanted to get out of taking this
+course. Do you feel like that personal goal was met? Why or why not?
+
+I feel like my personal goal has been met. At the beginning of the semester, I had no idea how to use python. Now I feel like I have the basis understanding of how to use python and I have a much better conceptual knowledge of the class material because of the work done in the lab. 
+
+2. Please fill out the course feedback survey, I will read every word and very much appreciate
+the feedback.
+
+3. Good luck in the rest of your education and career!
+
+\section{Conclusion}
+In conclusion, this lab was a great learning experience. It was really useful to go through all the steps of breaking down the input signal, designing your filter, applying the filter, and then checking to make sure you filter did what you wanted it to. 
+
+\section{Github}
+https://github.com/haddjays?tab=repositories
+\end{document}
+
+\section{Conclusion}
+
+%This template was created by Roza Aceska.
